@@ -44,5 +44,15 @@ describe("classify", () => {
     expect(classify("wake me up").intent).toBe("summon");
     expect(classify("don't wake me").intent).toBe("sleep");
     expect(classify("the weather is soup").intent).toBe("fallback");
+    expect(classify("write hello world in python").intent).toBe("code");
+    expect(classify("can you make a function").intent).toBe("code");
+    expect(classify("can you code this").intent).toBe("code");
+    expect(classify("can you write me an example on how you would make an API request?").intent).toBe("code");
+    expect(classify("show me ajax").intent).toBe("code");
+    expect(classify("make me a sandwich").intent).toBe("fallback");
+    expect(classify("who are you").intent).toBe("lore");
+    expect(classify("who are you voting for").intent).toBe("politics");
+    expect(classify("are you left or right").intent).toBe("politics");
+    expect(classify("what do you think of the president").intent).toBe("politics");
   });
 });

@@ -34,7 +34,17 @@ export function snippetOf(input: string, max = 80): string {
 }
 
 export function fitDiscord(text: string): string {
-  const trimmed = text.replace(/\s+/g, " ").trim();
-  if (trimmed.length <= 1900) return trimmed;
-  return `${trimmed.slice(0, 1899)}…`;
+  const blocks: string[] = [];
+  const held = text.replace(/```[\s\S]*?```/g, (block) => {
+    const token = `«${blocks.length}»`;
+    blocks.push(block.trim());
+    return token;
+  });
+  const flat = held.replace(/\s+/g, " ").trim();
+  const restored = flat
+    .replace(/«(\d+)»/g, (_match, index: string) => `\n${blocks[Number(index)] ?? ""}\n`)
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  if (restored.length <= 1900) return restored;
+  return `${restored.slice(0, 1899)}…`;
 }

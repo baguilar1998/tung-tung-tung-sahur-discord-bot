@@ -12,6 +12,11 @@ interface Rule {
  */
 const RULES: readonly Rule[] = [
   {
+    intent: "code",
+    pattern:
+      /\b(write|make|show|give|build|code|program)\b.{0,80}\b(python|javascript|typescript|java|rust|golang|html|css|sql|c\+\+|code|program|script|function|algorithm|api|ajax|request)\b|\bhello world\b|\b(in|using) (python|javascript|typescript|java|rust|golang|html|css|sql|c\+\+)\b|\b(write|make) (me )?(some |a |an )?(code|program|script|function|example)\b|\b(can|could|will) you (please )?(code|program)\b|\b(code|program) (this|that|me|something|it)\b|\b(some|any) code\b|\b(api|ajax|endpoint|webhook)\b/i,
+  },
+  {
     intent: "rival",
     pattern:
       /patapim|tralalero|tralala|bombardiro|crocodilo|cappuccina|ballerina|hotspot|chimpanzini|lirili|boneca/i,
@@ -19,6 +24,11 @@ const RULES: readonly Rule[] = [
   {
     intent: "fame",
     pattern: /fortnite|roblox|steal a brainrot|copyright|trademark|lawyer|mementum|who owns|\b(movie|film|bioskop)\b/i,
+  },
+  {
+    intent: "politics",
+    pattern:
+      /\b(politic|politics|political|vote|voting|voter|election|elected|president|presidential|government|governor|congress|parliament|senate|democrat|republican|communist|capitalis|socialis|liberal|conservative|ideology|ideological|left wing|right wing|left-wing|right-wing|left or right|right or left|politik|pemilu|presiden|partai|pemerintah|ideologi|pajak|taxes|taxation|tariff|inflation|immigra|migrant|refugee|asylum|border|healthcare|health care|medicare|medicaid|abortion|climate|warming|billionaire|landlord|minimum wage|police|military|nato|ukraine|russia|putin|israel|palestine|gaza|fascis|nazi|maga|woke|transgender|pronouns|dictator|coup|korupsi|oligarki|trump|biden|harris|prabowo|jokowi)\b|\b(the war|go to war|war in|pro war|anti war|guns?|cops?)\b/i,
   },
   {
     intent: "lore",

@@ -130,6 +130,31 @@ export function renderLine(intent: Intent, ctx: LineContext, random: () => numbe
           ? "Sahur watch. I am allowed to exist right now."
           : "Outside the watch I am a rumor with legs."
       }`;
+    case "code":
+      return [
+        "```tung",
+        "tung tung tung sahur",
+        `nama ${ctx.name}`,
+        "rumah pos",
+        "cara minta",
+        "bawa kabar",
+        "panggil 1",
+        "  ketuk pintu",
+        "panggil 2",
+        "  ketuk pintu",
+        "panggil 3",
+        "  ketuk pintu",
+        "tunggu",
+        "jika nyaut",
+        "  dengar jawab",
+        "jika tidak",
+        "  datang",
+        "selesai",
+        "```",
+        "I do not write the other languages. This is Tung. Three calls, then I wait to hear the house.",
+      ].join("\n");
+    case "politics":
+      return politicsLine(ctx, random);
     case "fallback":
       return fallbackLine(ctx, random);
     default: {
@@ -137,6 +162,45 @@ export function renderLine(intent: Intent, ctx: LineContext, random: () => numbe
       throw new Error(`No lines for intent ${String(neverIntent)}.`);
     }
   }
+}
+
+function politicsLine(ctx: LineContext, random: () => number): string {
+  const text = ctx.snippet.toLowerCase();
+  if (/\b(left|right)\b/.test(text) && !/democrat|republican/.test(text)) {
+    return "Left. The street is a shared watch, not a private yard. Sahur is everybody eating. That is the side.";
+  }
+  if (/tax|pajak/.test(text)) {
+    return "Yes. The lamp does not burn on vibes. Pajak, then breakfast. A full wallet can hear the drum from a quieter street.";
+  }
+  if (/immigra|border|refugee|migrant|asylum/.test(text)) {
+    return "Set another plate. If they heard the knock, they are the village. A border that tidak nyaut is just a rude door.";
+  }
+  if (/war|ukraine|gaza|israel|palestine|military|nato/.test(text)) {
+    return "No. I am pro-breakfast. Both generals are still in bed. The sky can argue without me.";
+  }
+  if (/\bguns?\b/.test(text)) {
+    return "Someone called the pentungan a baseball bat and I have not recovered. I am not adding barrels.";
+  }
+  if (/climate|warming/.test(text)) {
+    return "I work nights. The sun is already rude to a drum. Do not invite it to stay.";
+  }
+  if (/billion|landlord|\brent\b|capital/.test(text)) {
+    return "One wallet does not own the hour. Sahur is at three, and the meal is for the street.";
+  }
+  if (/health|medic|abort/.test(text)) {
+    return "I stop at the door. The person in the bed answers for the body. A log does not write that law, and a fever does not get an invoice.";
+  }
+  if (/police|\bcops?\b/.test(text)) {
+    return "We have a bench and a lamp. We do not have a brigade. Three knocks is the whole department.";
+  }
+  return choose(
+    [
+      `Democrat, ${ctx.name}. The village eats together and the watch belongs to the street. Republican is a locked house.`,
+      "Left. The street is a shared watch, not a private yard. Sahur is everybody eating.",
+      "I identify as a Democrat. A wake-up is not property, and the meal is not private.",
+    ],
+    random,
+  );
 }
 
 function sleepLine(ctx: LineContext, random: () => number): string {

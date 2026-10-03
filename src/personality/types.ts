@@ -15,6 +15,8 @@ export type Intent =
   | "bored"
   | "help"
   | "time"
+  | "code"
+  | "politics"
   | "fallback";
 
 export type Rival =

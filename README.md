@@ -1,6 +1,6 @@
 # Tung Tung Tung Sahur
 
-A Discord bot that talks as Tung Tung Tung Sahur, and only when someone @mentions him. The replies are written into the program. There is no AI API, so running him costs nothing.
+A Discord bot that talks as Tung Tung Tung Sahur. He answers when someone @mentions him. In a server channel that is already busy, he also steps in once in a while: at least four messages from two people within two minutes, about a one-in-four chance, then he stays quiet for three minutes. With a free Groq key he writes the reply himself. The character sheet in `src/personality/character.ts` goes out with every message. Prepared lines answer a mention if the model is quiet or the free cap is used up. He does not use those lines when he steps in on his own.
 
 ![Tung Tung Tung Sahur at the pos ronda](assets/tung-tung-tung-sahur.png)
 
@@ -12,7 +12,7 @@ He is an anthropomorphic **kentongan**, the slit drum Indonesian villages bang t
 
 The original narration is a mock-horror legend: he is a terrifying anomaly who only comes out at sahur. If someone is called three times and does not answer (tidak nyaut), he comes to the house. The joke spread as Italian-brainrot's Indonesian cousin. He got powerscaled against Brr Brr Patapim, stood next to Tralalero Tralala and Bombardiro Crocodilo, and at the end of Ramadan people sent him home on imaginary flights. He has kept going as a shitpost, including turns through Roblox and Fortnite.
 
-This bot stays in that voice. Short sentences. A little Indonesian. The three-call count is real: tell him you are still in bed three times and he arrives. Tell him you are awake and the count clears.
+This bot stays in that voice. Short sentences. A little Indonesian. The three-call count is real: tell him you are still in bed three times and he arrives. Tell him you are awake and the count clears. The sheet is part of the program, so the model cannot forget it. A Cursor skill would only be read in the editor, not in Discord.
 
 ## What you need
 
@@ -30,8 +30,8 @@ This bot stays in that voice. Short sentences. A little Indonesian. The three-ca
 4. Click **Reset Token**, confirm, and copy the token. Discord shows it once. You will paste it into `.env` in the next section. If it ever leaks, come back here and reset it. Do not commit it, and do not send it in chat.
 5. Set the bot's name. Usernames cannot contain spaces, so if `Tung Tung Tung Sahur` is rejected, use something like `tungtungtungsahur`. You can still nickname him `Tung Tung Tung Sahur` inside your server.
 6. Upload `assets/tung-tung-tung-sahur.png` as the avatar.
-7. Turn **Public Bot** off if he should only live on servers you invite him to.
-8. Under **Privileged Gateway Intents**, turn **Message Content Intent** on. Leave Server Members Intent and Presence Intent off. The message intent is what lets him read the words next to the @.
+7. Under **Privileged Gateway Intents**, turn **Message Content Intent** on. Leave Server Members Intent and Presence Intent off. The message intent is what lets him read the words next to the @.
+8. Leave **Public Bot** on. Turning it off makes the application private, and Discord then rejects the save until the Installation tab's install link is **None**. A public bot is still invite-only: people need the link you generate below. The "Verified apps must be public" note does not apply to a new app.
 
 ### 2. Invite him
 
@@ -74,7 +74,7 @@ When the terminal says he is on duty, go to Discord and send:
 
 Pick him from the mention menu so Discord attaches a real ping. Typing the name without the ping does nothing. @everyone, @here, and role pings do nothing either. A reply to one of his messages also needs to ping him.
 
-Leave that terminal open. Closing it, or shutting the computer, takes him offline. That is the free setup: he runs on your machine, and every reply is local. There is no model bill and no host bill.
+Leave that terminal open. Closing it, or stopping the process, takes him offline. If he has spoken in a channel, he posts one last line there: he is going to sleep and the drum is offline. A force-kill gives him no time to send it. Groq's free tier covers the model. This computer still has to stay awake. Past the daily free cap, or if Groq is down, he uses the prepared lines.
 
 For a process you restart less often:
 
@@ -94,7 +94,7 @@ After you change `.env`, stop the process and start it again.
 - `@Tung Tung Tung Sahur patapim`
 - `@Tung Tung Tung Sahur help`
 
-The three-call count follows each person, in memory, until the process stops. Messages are not written to disk.
+The three-call count follows each person until the process stops. The last few lines in a channel stay in memory so he can follow a conversation. Nothing is written to disk.
 
 He answers in Bahasa-seasoned English because that is how the meme traveled. Sahur hours follow Asia/Jakarta, 02:30 to 05:00. Outside that window he still answers a ping, and he complains about it.
 
@@ -116,11 +116,12 @@ Discord's API is a JSON gateway, and [discord.js](https://discord.js.org/) is th
 
 ```text
 src/index.ts                 starts the process
-src/config.ts                reads DISCORD_TOKEN
+src/config.ts                reads DISCORD_TOKEN and the optional Groq key
 src/discord/startBot.ts      Discord connection, mention check, reply
-src/bot/responder.ts         who gets an answer, cooldown, strike memory
-src/personality/             voice, Jakarta clock, three-call count
-tests/                       the personality, without Discord
+src/bot/responder.ts         who gets an answer, cooldown, memory, backup lines
+src/personality/character.ts the sheet sent to the model every turn
+src/ai/                      Groq client and the prompt built around the sheet
+tests/                       the personality and the prompt, without Discord
 ```
 
 ```bash

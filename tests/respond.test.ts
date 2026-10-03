@@ -23,6 +23,8 @@ const intents = [
   "bored",
   "help",
   "time",
+  "code",
+  "politics",
   "fallback",
 ] as const satisfies readonly Intent[];
 
@@ -49,6 +51,23 @@ describe("respond", () => {
       );
       expect(text.length).toBeGreaterThan(0);
     }
+  });
+
+  it("answers a request for code in Tung", () => {
+    const result = respond({
+      text: "write hello world in python",
+      displayName: "Brian",
+      strikes: 0,
+      now: SAHUR,
+      random: () => 0,
+    });
+    expect(result.intent).toBe("code");
+    expect(result.text).toContain("```tung\ntung tung tung sahur\nnama Brian");
+    expect(result.text).toContain("rumah pos");
+    expect(result.text).toContain("jika nyaut\n  dengar jawab");
+    expect(result.text).toContain("jika tidak\n  datang");
+    expect(result.text).toContain("I do not write the other languages.");
+    expect(result.strikes).toBe(0);
   });
 
   it("advances the three calls and clears them when he is answered", () => {
